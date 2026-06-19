@@ -1,0 +1,11 @@
+# files that tells git to ignore
+
+target/
+.idea/
+*.iml
+*.log
+*.class
+*.jar
+.java-version
+.vscode/
+.env 
