@@ -28,6 +28,17 @@ public class Main {
 
         System.out.println("Student Profiles:");
         student1.printProfile();
-        student2.printProfile();    
+        student2.printProfile();
+        
+        
+
+        CourseOffering offering = new CourseOffering("O001", "Java Programming - Spring 2024", course1, instructor1,
+                "2024-03-01", "2024-06-01", 30, "In-person");
+        CourseOffering offering2 = new CourseOffering("O002", "Data Science with Python - Summer 2024", course2, instructor2,
+                "2024-06-15", "2024-09-15", 25, "Online");
+
+        System.out.println("\nCourse Offering Summaries:");
+        offering.printOfferingSummary();
+        offering2.printOfferingSummary();
     }
 }
