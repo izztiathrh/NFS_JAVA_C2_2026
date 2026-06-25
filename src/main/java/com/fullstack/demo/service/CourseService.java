@@ -1,5 +1,6 @@
 package com.fullstack.demo.service;
 
+import com.fullstack.demo.exception.CourseNotFoundException;
 import com.fullstack.demo.exception.DuplicateCourseException;
 import com.fullstack.demo.exception.InvalidCourseException;
 import com.fullstack.demo.model.Course;
@@ -26,7 +27,8 @@ public class CourseService {
 
     public Course getCourseById(String courseId) {
         return courseRepository.findById(courseId)
-                .orElseThrow(() -> new InvalidCourseException("Course with ID " + courseId + " not found."));
+                                .orElseThrow(() -> new CourseNotFoundException(courseId));
+
     }
     
 
@@ -109,7 +111,8 @@ public class CourseService {
 
     public void deleteCourse(String courseId) {
         if (!courseRepository.existsById(courseId)) {
-            throw new InvalidCourseException("Course with ID " + courseId + " not found.");
+                throw new CourseNotFoundException(courseId);
+
         }
         courseRepository.deleteById(courseId);
     }

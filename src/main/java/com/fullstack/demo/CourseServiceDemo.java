@@ -62,6 +62,9 @@ public class CourseServiceDemo {
             System.out.println("\n=== 9. Try to Find Deleted Course ===");
             courseService.getCourseById("C003");
 
+            System.out.println("\n=== 10. Invalid Duration Test ===");
+            courseService.updateDuration("C001", -5);
+
         } catch (InvalidCourseException e) {
             System.out.println("Validation error: " + e.getMessage());
 
@@ -73,6 +76,7 @@ public class CourseServiceDemo {
         }
     }
 
+    
     private static void printCourses(List<Course> courses) {
         if (courses.isEmpty()) {
             System.out.println("No courses found.");
