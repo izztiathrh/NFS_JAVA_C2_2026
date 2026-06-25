@@ -23,6 +23,10 @@ public class CourseService {
         return courseRepository.save(course);
     }
 
+    public Course getCourseById(String courseId) {
+        return courseRepository.findById(courseId)
+                .orElseThrow(() -> new InvalidCourseException("Course with ID " + courseId + " not found."));
+    }
     
 
     public List<Course> getAllCourses() {
@@ -42,6 +46,15 @@ public class CourseService {
         return courseRepository.findAll()
                 .stream()
                 .filter(course -> course.getTitle().toLowerCase().contains(safeKeyword))
+                .toList();
+    }
+
+    public List<Course> filterByLevel(String level) {
+        String safeLevel = level == null ? "" : level.toLowerCase();
+
+        return courseRepository.findAll()
+                .stream()
+                .filter(course -> course.getLevel().toLowerCase().equals(safeLevel))
                 .toList();
     }
 
