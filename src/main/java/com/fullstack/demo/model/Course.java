@@ -69,4 +69,6 @@ public class Course {
         }
         return value.trim();
     }
+
+    
 }
