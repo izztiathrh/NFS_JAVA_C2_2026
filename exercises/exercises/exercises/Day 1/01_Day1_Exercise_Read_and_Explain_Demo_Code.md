@@ -1,4 +1,24 @@
-# Day 1 - Exercise 1
+# Day 1 Exercise 01 - Read and Explain the Demo Code
+
+## Learning Goal
+
+By the end of this exercise, you should be able to explain a basic Java class, object, constructor, field, method, and object relationship.
+
+## Files to Open
+
+Open the Day 1 demo project and review these files:
+
+```text
+Course.java
+Instructor.java
+Student.java
+Main.java
+```
+
+## Tasks
+
+Answer the following questions in your notebook or README.md file:
+
 1. What is the purpose of `Course.java`?
 > Each Course object stores details about one course (ID, title, duration in hours, level, and an instructor) and has methods to read those details and print a summary.
 
@@ -19,14 +39,26 @@
 7. What does `student1.printProfile();` do?
 > Would print a student's profile details to the screen. 
 
+## AI-Assisted Task
+
+Use ChatGPT, Gemini, Claude, or Windsurf and ask:
+
+```text
+Explain this Java class to someone who already knows TypeScript or C#.
+```
+
+Then write down:
+
 1. One explanation from AI that helped you.
 > The mapping to languages I already know made it click. A Java class with private fields plus public getters is just like a C# class with properties or a TypeScript class with private members and accessor methods. The constructor pattern this.field = field is the same as in C#/TS, and a Course holding an Instructor reference is a "has-a" relationship — identical to a TS class with a field of another class type (private instructor: Instructor). Seeing those direct parallels made the Java syntax feel familiar instead of new.
 
 2. One part you still needed the trainer or your own reading to understand.
 > The AI only give syntax level comparison but not in term of encapsulation, validation or controlling object state.
 
-# Day 1 - Exercise 3:
+## Submission Evidence
 
-Why is CourseOffering more useful than using only Course when building a real web application?
+Add your answers to README.md under:
 
-A Course is just the general template (e.g. "Java Fundamentals"), but a real app needs to run that same course multiple times with different instructors, dates, and capacities. Without CourseOffering, there'd be no way to represent the June 2026 intake and the August 2026 intake as separate sessions — they'd collide since they share the same Course. CourseOffering lets one Course be reused across many scheduled runs, which matches how real systems track separate intakes, enrolments, and instructors per session.
+```text
+## Day 1 Exercise 01 - Code Explanation
+```
