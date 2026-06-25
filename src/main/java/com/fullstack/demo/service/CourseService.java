@@ -36,12 +36,12 @@ public class CourseService {
 
     public List<Course> searchByTitle(String keyword) {
         // String safeKeyword;
-
-        // if (keyword == null) {
+  // if (keyword == null) {
         //     safeKeyword = "";
         // } else {
         //     safeKeyword = keyword.trim().toLowerCase();
         // }
+      
         String safeKeyword = keyword == null ? "" : keyword.toLowerCase();
 
         return courseRepository.findAll()
@@ -95,5 +95,22 @@ public class CourseService {
                 .filter(course -> course.getInstructor() != null)
                 .filter(course -> course.getInstructor().getInstructorName().toLowerCase().contains(safeInstructorName))
                 .toList();
+    }
+
+    public Course updateDuration(String courseId, int newDurationHours) {
+        if (newDurationHours <= 0) {
+            throw new InvalidCourseException("New duration must be greater than zero.");
+        }
+
+        Course course = getCourseById(courseId);
+        course.setDurationHours(newDurationHours);
+        return courseRepository.save(course);
+    }
+
+    public void deleteCourse(String courseId) {
+        if (!courseRepository.existsById(courseId)) {
+            throw new InvalidCourseException("Course with ID " + courseId + " not found.");
+        }
+        courseRepository.deleteById(courseId);
     }
 }
