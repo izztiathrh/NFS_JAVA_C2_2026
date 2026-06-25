@@ -8,7 +8,6 @@ import com.fullstack.demo.model.Instructor;
 import com.fullstack.demo.repository.CourseRepository;
 import com.fullstack.demo.repository.InMemoryCourseRepository;
 import com.fullstack.demo.service.CourseService;
-
 import java.util.List;
 
 public class CourseServiceDemo {
