@@ -182,6 +182,7 @@ Why is InMemoryCourseRepository temporary storage?
 - only lives in Java memory (RAM)
 - program stop running > data gone
 - no file database, only useful for development
+
 What would probably replace it later when we use MongoDB?
 - MongoCourseRepository > implement COurseRepository interface
 - interface will talk to actual MongoDB database (save doc to collection, query ID)
