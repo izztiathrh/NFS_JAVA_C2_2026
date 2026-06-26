@@ -8,6 +8,7 @@ import com.fullstack.demo.model.Instructor;
 import com.fullstack.demo.repository.CourseRepository;
 import java.util.List;
 
+//contain business logic
 public class CourseService {
     private final CourseRepository courseRepository;
 
@@ -15,6 +16,7 @@ public class CourseService {
         this.courseRepository = courseRepository;
     }
 
+    
     public Course createCourse(Course course) {
         validateCourse(course);
 
