@@ -75,3 +75,5 @@ Answer:
 ```text
 What is one difference between a Java object and a JavaScript object?
 ```
+-It doesnt have getter and setter
+- Java: strictly class based & Javascript: objects are dynamic
