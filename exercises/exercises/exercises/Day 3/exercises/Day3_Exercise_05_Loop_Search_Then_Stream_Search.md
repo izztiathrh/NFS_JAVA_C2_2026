@@ -185,9 +185,13 @@ Answer:
 ```text
 Which version is easier to understand: loop or stream? Why?
 ```
+-loop easier to understand for beginner bcs it got through list one by one > check condition > add if matches
+- stream does same thing but hides step behind filter() & toList(), but it reads faster
 
 Then answer:
 
 ```text
 What does filter() do in a stream?
 ```
+- goes through each element in stream and keeps only that pass condition, discard the rest
+- check inside the loop whether to add or not

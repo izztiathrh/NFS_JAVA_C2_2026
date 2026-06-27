@@ -6,6 +6,7 @@ import com.fullstack.demo.exception.InvalidCourseException;
 import com.fullstack.demo.model.Course;
 import com.fullstack.demo.model.Instructor;
 import com.fullstack.demo.repository.CourseRepository;
+import java.util.ArrayList;
 import java.util.List;
 
 //contain business logic
@@ -113,9 +114,45 @@ public class CourseService {
 
     public void deleteCourse(String courseId) {
         if (!courseRepository.existsById(courseId)) {
-                throw new CourseNotFoundException(courseId);
+            throw new CourseNotFoundException(courseId);
 
         }
         courseRepository.deleteById(courseId);
+    }
+
+    public List<Course> searchByLevelUsingLoop(String level) {
+        String safeLevel = level == null ? "" : level.trim();
+
+        List<Course> results = new ArrayList<>();
+
+        for (Course course : courseRepository.findAll()) {
+            // check if course level matches safeLevel
+            if (course.getLevel().equalsIgnoreCase(safeLevel)) {
+                results.add(course);
+            }
+        }
+
+        return results;
+    }
+    
+    public List<Course> searchByLevelUsingStream(String level) {
+        String safeLevel = level == null ? "" : level.trim();
+
+        return courseRepository.findAll()
+                .stream()
+                .filter(course -> course.getLevel().equalsIgnoreCase(safeLevel))
+                .toList();
+    }
+
+    public List<Course> searchByMinimumDurationUsingLoop(int minimumHours) {
+        List<Course> results = new ArrayList<>();
+
+        for (Course course : courseRepository.findAll()) {
+            if (course.getDurationHours() >= minimumHours) {
+                results.add(course);
+            }
+        }
+
+        return results;
     }
 }

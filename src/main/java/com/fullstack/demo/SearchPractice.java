@@ -22,5 +22,19 @@ public class SearchPractice {
         for (Course course : beginnerCourses) {
             System.out.println(course.getCourseId() + " - " + course.getTitle());
         }
+
+        List<Course> intermediateCourses = courseService.searchByLevelUsingStream("Intermediate");
+
+        System.out.println("=== Intermediate Courses ===");
+        for (Course course : intermediateCourses) {
+            System.out.println(course.getCourseId() + " - " + course.getTitle());
+        }
+
+        List<Course> longCourses = courseService.searchByMinimumDurationUsingLoop(15);
+
+        System.out.println("=== Long Courses (>= 15 hours) ===");
+        for (Course course : longCourses) {
+            System.out.println(course.getCourseId() + " - " + course.getTitle());
+        }
     }
 }
