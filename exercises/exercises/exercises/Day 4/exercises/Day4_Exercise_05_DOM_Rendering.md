@@ -77,3 +77,4 @@ Answer:
 What does the DOM allow JavaScript to do?
 ```
 - render and manipulate student data
+- to interact js with HTML and CSS
