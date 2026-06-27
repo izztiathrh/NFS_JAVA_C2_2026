@@ -1,0 +1,23 @@
+[
+    {
+        "id": "CS101",
+        "title": "Introduction to Computer Science",
+        "durationHours": 40,
+        "level": "Beginner",
+        "instructor": "Dr. Smith"
+    },
+    {
+        "id": "CS102",
+        "title": "Data Structures and Algorithms",
+        "durationHours": 40,
+        "level": "Intermediate",
+        "instructor": "Dr. Johnson"
+    },
+    {
+        "id": "CS103",
+        "title": "Web Development",
+        "durationHours": 40,
+        "level": "Intermediate",
+        "instructor": "Dr. Williams"
+    }
+]
