@@ -92,3 +92,4 @@ Answer:
 ```text
 Why are arrow functions important before learning React?
 ```
+- because React relies on functional programming, array manipulation and concise syntax
