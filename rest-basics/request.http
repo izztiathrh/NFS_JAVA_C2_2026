@@ -1,0 +1,50 @@
+### 1. Health check 200 means successful read
+GET http://localhost:8081/api/health
+
+### 2. Get all course offerings
+GET http://localhost:8081/api/course-offerings
+
+### 3. Get a specific course offering that exists
+GET http://localhost:8081/api/course-offerings/CO001
+
+### 4. Get a course that doesnt exist
+GET http://localhost:8081/api/course-offerings/C999
+
+### 5. Create a new course offering
+POST http://localhost:8081/api/course-offerings
+Content-Type: application/json
+
+{
+  "courseTitle": "Spring Boot Essentials",
+  "instructorName": "Mr Kumar",
+  "startDate": "2026-08-01",
+  "capacity": 15
+}
+
+### 6. Create an invalid course offering
+POST http://localhost:8081/api/course-offerings
+Content-Type: application/json
+
+{
+  "courseTitle": "",
+  "instructorName": "",
+  "startDate": "",
+  "capacity": 0
+}
+
+### 7. Get all instructors
+GET http://localhost:8081/api/instructors
+
+### 8. Get a specific instructor
+GET http://localhost:8081/api/instructors/I001
+
+### 9. Create an instructor
+POST http://localhost:8081/api/instructors
+Content-Type: application/json
+
+{
+  "name": "Ms Wong",
+  "specialty": "DevOps",
+  "yearsExperience": 5,
+  "available": true
+}
