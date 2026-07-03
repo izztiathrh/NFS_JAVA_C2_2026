@@ -1,8 +1,10 @@
 const API_BASE_URL = "http://localhost:8081/api";
 
-const loadButton = document.querySelector("#loadButton");
+// Write your JavaScript here.
+//select HTML elements
 const statusText = document.querySelector("#statusText");
 const eventList = document.querySelector("#eventList");
+const loadButton = document.querySelector("#loadButton");
 
 function showStatus(message) {
   statusText.textContent = message;
@@ -52,10 +54,9 @@ async function loadEvents() {
   }
 }
 
-async function searchEventById(event) {
-  event.preventDefault();
-
-  const eventId = document.querySelector("#eventIdInput").value.trim();
+async function searchEventById() {
+  events.preventDefault(); // Prevent form submission and page reload
+  const eventId = document.querySelector("#searchInput").value.trim();
 
   if (eventId === "") {
     showStatus("Please enter an event ID.");
