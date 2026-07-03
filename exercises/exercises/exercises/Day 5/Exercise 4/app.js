@@ -54,9 +54,9 @@ async function loadEvents() {
   }
 }
 
-async function searchEventById() {
-  events.preventDefault(); // Prevent form submission and page reload
-  const eventId = document.querySelector("#searchInput").value.trim();
+async function searchEventById(event) {
+  event.preventDefault(); // Prevent form submission and page reload
+  const eventId = document.querySelector("#eventIdInput").value.trim();
 
   if (eventId === "") {
     showStatus("Please enter an event ID.");
