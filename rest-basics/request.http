@@ -48,3 +48,24 @@ Content-Type: application/json
   "yearsExperience": 5,
   "available": true
 }
+
+### 10. GET all bookings
+GET http://localhost:8081/api/bookings
+
+
+###11. GET a specific booking
+GET http://localhost:8081/api/bookings/BK001
+
+### 12. Create a new booking
+POST http://localhost:8081/api/bookings
+Content-Type: application/json
+
+{
+  "eventId": "EV001",
+  "participantName": "Rahim Gonzalez",
+  "participantEmail": "rahim@example.com",
+  "seats": 2
+}
+
+### 13. Get all events (check seat counts)
+GET http://localhost:8081/api/events

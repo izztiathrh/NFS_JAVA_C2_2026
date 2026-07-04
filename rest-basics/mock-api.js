@@ -1,115 +1,411 @@
-const API_BASE_URL = "http://localhost:8081/api";
+const http = require("http");
 
-const loadButton = document.querySelector("#loadButton");
-const statusText = document.querySelector("#statusText");
-const eventList = document.querySelector("#eventList");
+const PORT = 8081;
+let events = [
+  {
+    id: "EV001",
+    title: "Tech Career Fair",
+    date: "2026-08-10",
+    venue: "Kuala Lumpur Convention Centre",
+    availableSeats: 120,
+  },
+  {
+    id: "EV002",
+    title: "Web Development Bootcamp",
+    date: "2026-08-15",
+    venue: "Digital Learning Hub",
+    availableSeats: 35,
+  },
+  {
+    id: "EV003",
+    title: "AI for Business Workshop",
+    date: "2026-08-20",
+    venue: "Innovation Centre",
+    availableSeats: 50,
+  },
+];
 
-function showStatus(message) {
-  statusText.textContent = message;
+let bookings = [];
+
+let courseOfferings = [
+  {
+    id: "CO001",
+    courseTitle: "Java Fundamentals",
+    instructorName: "Mr Tan",
+    startDate: "2026-07-15",
+    capacity: 25,
+    status: "OPEN",
+  },
+  {
+    id: "CO002",
+    courseTitle: "React Basics",
+    instructorName: "Ms Lee",
+    startDate: "2026-07-22",
+    capacity: 20,
+    status: "OPEN",
+  },
+];
+
+let instructors = [
+  {
+    id: "I001",
+    name: "Mr Tan",
+    specialty: "Java",
+    yearsExperience: 8,
+    available: true,
+  },
+  {
+    id: "I002",
+    name: "Ms Lee",
+    specialty: "React",
+    yearsExperience: 6,
+    available: true,
+  },
+  {
+    id: "I003",
+    name: "Mr Kumar",
+    specialty: "Spring Boot",
+    yearsExperience: 10,
+    available: false,
+  },
+];
+
+function corsHeaders() {
+  return {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET,POST,DELETE,OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Content-Type": "application/json",
+  };
 }
 
-function formatEvent(event) {
-  return `${event.title} - ${event.date} - ${event.venue} - ${event.availableSeats} seats available`;
+function sendJson(response, statusCode, data) {
+  response.writeHead(statusCode, corsHeaders());
+  response.end(JSON.stringify(data, null, 2));
 }
 
-function renderEvents(events) {
-  eventList.innerHTML = "";
+function readJsonBody(request) {
+  return new Promise((resolve, reject) => {
+    let body = "";
 
-  events.forEach((event) => {
-    const listItem = document.createElement("li");
-    listItem.textContent = formatEvent(event);
-    eventList.appendChild(listItem);
+    request.on("data", (chunk) => {
+      body += chunk;
+    });
+
+    request.on("end", () => {
+      try {
+        resolve(body ? JSON.parse(body) : {});
+      } catch (error) {
+        reject(error);
+      }
+    });
   });
 }
 
-function renderSingleEvent(event) {
-  eventList.innerHTML = "";
-
-  const listItem = document.createElement("li");
-  listItem.textContent = formatEvent(event);
-
-  eventList.appendChild(listItem);
+function createId(prefix, currentLength) {
+  return `${prefix}${String(currentLength + 1).padStart(3, "0")}`;
 }
 
-async function loadEvents() {
-  showStatus("Loading events...");
+function validateCourseOffering(payload) {
+  const errors = [];
 
-  try {
-    const response = await fetch(`${API_BASE_URL}/events`);
-
-    console.log("GET /events status:", response.status);
-
-    if (!response.ok) {
-      throw new Error(`Request failed with status ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    renderEvents(data);
-    showStatus(`Loaded ${data.length} event(s).`);
-  } catch (error) {
-    showStatus(error.message);
+  if (!payload.courseTitle || payload.courseTitle.trim() === "") {
+    errors.push({ field: "courseTitle", message: "Course title is required" });
   }
+
+  if (!payload.instructorName || payload.instructorName.trim() === "") {
+    errors.push({
+      field: "instructorName",
+      message: "Instructor name is required",
+    });
+  }
+
+  if (!payload.startDate || payload.startDate.trim() === "") {
+    errors.push({ field: "startDate", message: "Start date is required" });
+  }
+
+  if (!Number.isInteger(payload.capacity) || payload.capacity < 1) {
+    errors.push({
+      field: "capacity",
+      message: "Capacity must be a whole number greater than 0",
+    });
+  }
+
+  return errors;
 }
 
-async function searchEventById(event) {
-  event.preventDefault();
+function validateInstructor(payload) {
+  const errors = [];
 
-  const eventId = document.querySelector("#eventIdInput").value.trim();
+  if (!payload.name || payload.name.trim() === "") {
+    errors.push({ field: "name", message: "Name is required" });
+  }
 
-  if (eventId === "") {
-    showStatus("Please enter an event ID.");
+  if (!payload.specialty || payload.specialty.trim() === "") {
+    errors.push({ field: "specialty", message: "Specialty is required" });
+  }
+
+  if (
+    !Number.isInteger(payload.yearsExperience) ||
+    payload.yearsExperience < 0
+  ) {
+    errors.push({
+      field: "yearsExperience",
+      message: "Years of experience must be 0 or more",
+    });
+  }
+
+  return errors;
+}
+
+function validateBooking(payload) {
+  const errors = [];
+
+  if (!payload.eventId || payload.eventId.trim() === "") {
+    errors.push({ field: "eventId", message: "Event ID is required" });
+  }
+
+  if (!payload.participantName || payload.participantName.trim() === "") {
+    errors.push({
+      field: "participantName",
+      message: "Participant name is required",
+    });
+  }
+
+  if (!payload.participantEmail || payload.participantEmail.trim() === "") {
+    errors.push({
+      field: "participantEmail",
+      message: "Participant email is required",
+    });
+  }
+
+  if (!Number.isInteger(payload.seats) || payload.seats < 1) {
+    errors.push({
+      field: "seats",
+      message: "Seats must be a whole number greater than 0",
+    });
+  }
+
+  return errors;
+}
+
+const server = http.createServer(async (request, response) => {
+  const url = new URL(request.url, `http://${request.headers.host}`);
+  const method = request.method;
+
+  if (method === "OPTIONS") {
+    response.writeHead(204, corsHeaders());
+    response.end();
     return;
   }
 
-  showStatus(`Searching for event ${eventId}...`);
+  if (method === "GET" && url.pathname === "/api/events") {
+    sendJson(response, 200, events);
+    return;
+  }
 
-  try {
-    const response = await fetch(`${API_BASE_URL}/events/${eventId}`);
+  const eventMatch = url.pathname.match(/^\/api\/events\/([^/]+)$/);
 
-    console.log("GET /events/{id} status:", response.status);
+  if (method === "GET" && eventMatch) {
+    const id = eventMatch[1];
+    const found = events.find((item) => item.id === id);
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      showStatus(data.message);
-      eventList.innerHTML = "";
+    if (!found) {
+      sendJson(response, 404, { message: `Event ${id} was not found` });
       return;
     }
 
-    renderSingleEvent(data);
-    showStatus(`Event ${data.id} loaded.`);
-  } catch (error) {
-    showStatus(error.message);
+    sendJson(response, 200, found);
+    return;
   }
-}
 
-function createSearchForm() {
-  const searchForm = document.createElement("form");
-  searchForm.id = "searchForm";
+  try {
+    if (method === "GET" && url.pathname === "/api/health") {
+      sendJson(response, 200, { status: "UP", service: "day-5-mock-api" });
+      return;
+    }
 
-  const label = document.createElement("label");
-  label.setAttribute("for", "eventIdInput");
-  label.textContent = "Search Event by ID: ";
+    if (method === "GET" && url.pathname === "/api/course-offerings") {
+      sendJson(response, 200, courseOfferings);
+      return;
+    }
 
-  const input = document.createElement("input");
-  input.id = "eventIdInput";
-  input.name = "eventIdInput";
-  input.type = "text";
-  input.placeholder = "Example: EV001";
+    const courseOfferingMatch = url.pathname.match(
+      /^\/api\/course-offerings\/([^/]+)$/,
+    );
 
-  const button = document.createElement("button");
-  button.type = "submit";
-  button.textContent = "Search";
+    if (method === "GET" && courseOfferingMatch) {
+      const id = courseOfferingMatch[1];
+      const found = courseOfferings.find((item) => item.id === id);
 
-  searchForm.appendChild(label);
-  searchForm.appendChild(input);
-  searchForm.appendChild(button);
+      if (!found) {
+        sendJson(response, 404, {
+          message: `Course offering ${id} was not found`,
+        });
+        return;
+      }
 
-  eventList.before(searchForm);
+      sendJson(response, 200, found);
+      return;
+    }
 
-  searchForm.addEventListener("submit", searchEventById);
-}
+    if (method === "POST" && url.pathname === "/api/course-offerings") {
+      const payload = await readJsonBody(request);
+      const errors = validateCourseOffering(payload);
 
-loadButton.addEventListener("click", loadEvents);
-createSearchForm();
+      if (errors.length > 0) {
+        sendJson(response, 400, { message: "Validation failed", errors });
+        return;
+      }
+
+      const created = {
+        id: createId("CO", courseOfferings.length),
+        courseTitle: payload.courseTitle.trim(),
+        instructorName: payload.instructorName.trim(),
+        startDate: payload.startDate.trim(),
+        capacity: payload.capacity,
+        status: "OPEN",
+      };
+
+      courseOfferings.push(created);
+      sendJson(response, 201, created);
+      return;
+    }
+
+    if (method === "GET" && url.pathname === "/api/instructors") {
+      sendJson(response, 200, instructors);
+      return;
+    }
+
+    const instructorMatch = url.pathname.match(/^\/api\/instructors\/([^/]+)$/);
+
+    if (method === "GET" && instructorMatch) {
+      const id = instructorMatch[1];
+      const found = instructors.find((item) => item.id === id);
+
+      if (!found) {
+        sendJson(response, 404, { message: `Instructor ${id} was not found` });
+        return;
+      }
+
+      sendJson(response, 200, found);
+      return;
+    }
+
+    if (method === "POST" && url.pathname === "/api/instructors") {
+      const payload = await readJsonBody(request);
+      const errors = validateInstructor(payload);
+
+      if (errors.length > 0) {
+        sendJson(response, 400, { message: "Validation failed", errors });
+        return;
+      }
+
+      const created = {
+        id: createId("I", instructors.length),
+        name: payload.name.trim(),
+        specialty: payload.specialty.trim(),
+        yearsExperience: payload.yearsExperience,
+        available: Boolean(payload.available),
+      };
+
+      instructors.push(created);
+      sendJson(response, 201, created);
+      return;
+    }
+
+    if (method === "GET" && url.pathname === "/api/bookings") {
+      sendJson(response, 200, bookings);
+      return;
+    }
+
+    const bookingMatch = url.pathname.match(/^\/api\/bookings\/([^/]+)$/);
+
+    if (method === "GET" && bookingMatch) {
+      const id = bookingMatch[1];
+      const found = bookings.find((item) => item.id === id);
+
+      if (!found) {
+        sendJson(response, 404, { message: `Booking ${id} was not found` });
+        return;
+      }
+
+      sendJson(response, 200, found);
+      return;
+    }
+
+    if (method === "DELETE" && bookingMatch) {
+      const id = bookingMatch[1];
+      const found = bookings.find((item) => item.id === id);
+
+      if (!found) {
+        sendJson(response, 404, { message: `Booking ${id} was not found` });
+        return;
+      }
+
+      found.status = "CANCELLED";
+
+      const event = events.find((item) => item.id === found.eventId);
+
+      if (event) {
+        event.availableSeats += found.seats;
+      }
+
+      sendJson(response, 200, found);
+      return;
+    }
+
+    if (method === "POST" && url.pathname === "/api/bookings") {
+      const payload = await readJsonBody(request);
+      const errors = validateBooking(payload);
+
+      if (errors.length > 0) {
+        sendJson(response, 400, { message: "Validation failed", errors });
+        return;
+      }
+
+      const event = events.find((item) => item.id === payload.eventId);
+
+      if (!event) {
+        sendJson(response, 404, {
+          message: `Event ${payload.eventId} was not found`,
+        });
+        return;
+      }
+
+      if (payload.seats > event.availableSeats) {
+        sendJson(response, 400, { message: "Not enough seats available" });
+        return;
+      }
+
+      const created = {
+        id: createId("BK", bookings.length),
+        eventId: event.id,
+        participantName: payload.participantName.trim(),
+        participantEmail: payload.participantEmail.trim(),
+        seats: payload.seats,
+        status: "CONFIRMED",
+      };
+
+      bookings.push(created);
+      event.availableSeats -= payload.seats;
+
+      sendJson(response, 201, created);
+      return;
+    }
+
+    sendJson(response, 404, { message: "Endpoint not found" });
+  } catch (error) {
+    if (error instanceof SyntaxError) {
+      sendJson(response, 400, { message: "Request body must be valid JSON" });
+      return;
+    }
+
+    sendJson(response, 500, { message: "Unexpected server error" });
+  }
+});
+
+server.listen(PORT, () => {
+  console.log(`Mock API running at http://localhost:${PORT}`);
+  console.log(`Try GET http://localhost:${PORT}/api/health`);
+});
