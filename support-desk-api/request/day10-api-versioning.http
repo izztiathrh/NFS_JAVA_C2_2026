@@ -1,0 +1,45 @@
+@token = REPLACE_WITH_REAL_JWT_ONCE_AUTH_EXISTS
+
+### Old endpoint still works
+GET http://localhost:8080/api/tickets
+
+### New v1 endpoint - get all
+GET http://localhost:8080/api/v1/tickets
+
+### New v1 endpoint - get one
+GET http://localhost:8080/api/v1/tickets/T001
+
+### New v1 endpoint - filter by status
+GET http://localhost:8080/api/v1/tickets?status=OPEN
+
+### New v1 endpoint - create a ticket
+POST http://localhost:8080/api/v1/tickets
+Content-Type: application/json
+
+{
+  "title": "VPN connection not working",
+  "description": "User cannot connect to company VPN from home.",
+  "category": "Network",
+  "priority": "MEDIUM",
+  "createdBy": "siti@example.com"
+}
+
+### Ticket report grouped by status
+GET http://localhost:8080/api/v1/reports/tickets-by-status
+Authorization: Bearer {{token}}
+
+## Ticket grouped by priority
+GET http://localhost:8080/api/v1/reports/tickets-by-priority
+Authorization: Bearer {{token}}
+
+### API documentation endpoint
+GET http://localhost:8080/api/docs
+
+
+### NOTE: JWT auth (Day 9) is not yet implemented in this project, so there is
+### no token to attach here and no 401/403 case to demonstrate. Once security
+### is added, requests without a token should be rejected on both
+### /api/v1/tickets/** and /api/tickets, and requests with a valid
+### USER/ADMIN token should succeed:
+# GET http://localhost:8080/api/v1/tickets
+# Authorization: Bearer <token>

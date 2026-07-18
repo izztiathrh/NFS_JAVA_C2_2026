@@ -1,0 +1,15 @@
+VERSIONING
+- means put a version number in API path
+api/v1/assets > this allows future changes w/o immediately breaking older clients
+
+DOCUMENTATION
+Documentation tell devs:
+1. What enpoints exist?
+2. What method to use?
+3. What authentication is needed?
+4. What does each endpoint do?
+JSON documentation endpointGET /api/docs
+
+AGGREGATION
+- means asking the db to calculate a summary
+e.g: 
