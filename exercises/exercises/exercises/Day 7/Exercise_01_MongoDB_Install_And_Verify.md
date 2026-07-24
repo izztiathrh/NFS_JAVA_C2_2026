@@ -117,9 +117,18 @@ Submit screenshots showing:
 ## Reflection Questions
 
 1. What is the purpose of the `admin` database?
+- USE TO MANAGE ADMINISTRATORS AND AUTHENTICATION
+- STORE USER AND ROLE INFO
 
 2. Why should an application use its own database user instead of the root administrator?
+- MORE SAFE AND SECURE
+- LIMIT PERMISSION SO APP CAN ONLY READ AND WRITE WHAT IT NEEDS
+- REDUCE RISK APP CREDENTIALS EXPOSED
 
 3. What is the difference between authentication and authorization?
+- AUTHENTICATE CHECKS WHO YOU ARE
+- AUTHORIZE CHECKS WHAT YOU ALLOWED TO DO
 
 4. What would happen if authentication was disabled on a production database?
+- ANYONE COULD CONNECT AND ACCESS/MODIFY DATA
+- SECURITY RISKS, DATA LOSS, UNAUTHORIZED ACCESS
