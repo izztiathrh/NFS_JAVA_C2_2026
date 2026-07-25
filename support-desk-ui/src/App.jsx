@@ -1,6 +1,7 @@
 import Layout from './components/Layout';
 import './App.css';
 import { useState } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import sampleTickets from './data/sampleTickets';
 import TicketList from './components/TicketList';
 import TicketDetail from './components/TicketDetail';
@@ -25,26 +26,61 @@ function App() {
   });
 
   return (
-    <Layout>
-      <div className="ticket-dashboard">
-        <div className="ticket-panel">
-          <TicketFilterPanel
-            searchText={searchText}
-            setSearchText={setSearchText}
-            status={statusFilter}
-            setStatus={setStatusFilter}
-            priority={priorityFilter}
-            setPriority={setPriorityFilter}
-          />
-          <TicketList
-            tickets={filteredTickets}
-            selectedId={selectedTicket?.id}
-            onSelect={setSelectedTicket}
-          />
-        </div>
-        <TicketDetail ticket={selectedTicket} />
-      </div>
-    </Layout>
+    <Routes>
+      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route
+        path="/login"
+        element={
+          <Layout>
+            <main className="auth-page">
+              <h2>Login</h2>
+              <p>Use this route to confirm React Router is working.</p>
+            </main>
+          </Layout>
+        }
+      />
+      <Route
+        path="/app/dashboard"
+        element={
+          <Layout>
+            <div className="ticket-dashboard">
+              <div className="ticket-panel">
+                <TicketFilterPanel
+                  searchText={searchText}
+                  setSearchText={setSearchText}
+                  status={statusFilter}
+                  setStatus={setStatusFilter}
+                  priority={priorityFilter}
+                  setPriority={setPriorityFilter}
+                />
+                <TicketList
+                  tickets={filteredTickets}
+                  selectedId={selectedTicket?.id}
+                  onSelect={setSelectedTicket}
+                />
+              </div>
+              <TicketDetail ticket={selectedTicket} />
+            </div>
+          </Layout>
+        }
+      />
+      <Route
+        path="/app/tickets"
+        element={
+          <Layout>
+            <main className="tickets-page">
+              <h2>Tickets</h2>
+              <p>This route can later hold the ticket index or detail views.</p>
+              <TicketList
+                tickets={filteredTickets}
+                selectedId={selectedTicket?.id}
+                onSelect={setSelectedTicket}
+              />
+            </main>
+          </Layout>
+        }
+      />
+    </Routes>
   );
 }
 
