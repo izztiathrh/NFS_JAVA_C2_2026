@@ -3,14 +3,13 @@ package com.example.AssetTracker;
 import java.time.Instant;
 
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import com.example.supportdesk.model.Ticket;
 import com.example.supportdesk.repository.TicketRepository;
 
-@SpringBootApplication
+@Configuration
 public class AssetTrackerApplication {
     private Instant createdAt;
 
@@ -21,10 +20,6 @@ public class AssetTrackerApplication {
 public void setCreatedAt(Instant createdAt) {   // ← parameter Instant
     this.createdAt = createdAt;
 }
-    public static void main(String[] args) {
-        SpringApplication.run(AssetTrackerApplication.class, args);
-    }
-
     @Bean
     CommandLineRunner testMongo(TicketRepository repo) {
         return args -> {

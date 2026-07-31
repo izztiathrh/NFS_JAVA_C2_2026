@@ -1,8 +1,9 @@
 package com.example.supportdesk.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
-public class CreateTicketRequest {
+public class UpdateTicketRequest {
 
     @NotBlank(message = "title is required")
     private String title;
@@ -14,9 +15,12 @@ public class CreateTicketRequest {
     private String category;
 
     @NotBlank(message = "priority is required")
+    @Pattern(regexp = "^(LOW|MEDIUM|HIGH)$", message = "priority must be LOW, MEDIUM or HIGH")
     private String priority;
 
-    private String createdBy;
+    @NotBlank(message = "status is required")
+    @Pattern(regexp = "^(OPEN|IN_PROGRESS|CLOSED)$", message = "status must be OPEN, IN_PROGRESS or CLOSED")
+    private String status;
 
     public String getTitle() {
         return title;
@@ -50,11 +54,11 @@ public class CreateTicketRequest {
         this.priority = priority;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
+    public String getStatus() {
+        return status;
     }
 
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

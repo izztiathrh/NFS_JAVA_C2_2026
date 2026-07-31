@@ -66,6 +66,67 @@ body {
   box-sizing: border-box;
 }
 
+/* App header styles */
+.app-header {
+  background: linear-gradient(90deg,#0f1724 0%, #0b1230 100%);
+  color: #fff;
+  padding: 18px 24px;
+  box-shadow: var(--shadow);
+}
+.app-header-inner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  justify-content: space-between;
+}
+.app-brand {
+  text-align: left;
+}
+.brand-title {
+  font-size: 28px;
+  font-weight: 700;
+}
+.brand-sub {
+  font-size: 12px;
+  opacity: 0.85;
+}
+.app-nav {
+  display: flex;
+  gap: 12px;
+}
+.nav-item {
+  padding: 8px 14px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.9);
+  text-decoration: none;
+  font-weight: 600;
+}
+.nav-item.active {
+  background: #fff;
+  color: #0b1230;
+}
+.app-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.user-name {
+  font-weight: 700;
+}
+.btn-logout {
+  background: #fff;
+  color: #0b1230;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 16px;
+  cursor: pointer;
+}
+
+.app-shell-content {
+  padding: 24px;
+}
+
 h1,
 h2 {
   font-family: var(--heading);

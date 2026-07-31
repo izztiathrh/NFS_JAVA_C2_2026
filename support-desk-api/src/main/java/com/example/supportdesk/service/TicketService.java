@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.supportdesk.dto.TicketResponse;
+import com.example.supportdesk.dto.UpdateTicketRequest;
+import com.example.supportdesk.dto.CreateTicketRequest;
 import com.example.supportdesk.exception.ResourceNotFoundException;
 
 @Service
@@ -53,5 +55,51 @@ public class TicketService {
                 .filter(ticket -> ticket.getId().equals(id))
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("Ticket " + id + " was not found"));
+    }
+
+    public TicketResponse updateTicket(String id, UpdateTicketRequest request) {
+        for (int i = 0; i < tickets.size(); i++) {
+            TicketResponse existing = tickets.get(i);
+            if (existing.getId().equals(id)) {
+                TicketResponse updated = new TicketResponse(
+                        existing.getId(),
+                        request.getTitle(),
+                        request.getDescription(),
+                        request.getCategory(),
+                        request.getPriority(),
+                        request.getStatus(),
+                        existing.getCreatedBy(),
+                        existing.getCreatedAt());
+                tickets.set(i, updated);
+                return updated;
+            }
+        }
+        throw new ResourceNotFoundException("Ticket " + id + " was not found");
+    }
+
+    public TicketResponse createTicket(CreateTicketRequest request) {
+        // generate a simple id: T + zero-padded next number
+        int next = tickets.size() + 1;
+        String id = String.format("T%03d", next);
+
+        String createdBy = request.getCreatedBy();
+        if (createdBy == null || createdBy.isBlank()) {
+            createdBy = "web-user";
+        }
+
+        String createdAt = java.time.LocalDate.now().toString();
+
+        TicketResponse created = new TicketResponse(
+                id,
+                request.getTitle(),
+                request.getDescription(),
+                request.getCategory(),
+                request.getPriority(),
+            "OPEN",
+                createdBy,
+                createdAt);
+
+        tickets.add(created);
+        return created;
     }
 }

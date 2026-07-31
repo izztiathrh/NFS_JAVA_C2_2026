@@ -1,22 +1,22 @@
-package com.example.supportdesk.dto;
+package com.example.supportdesk.model;
 
-import jakarta.validation.constraints.NotBlank;
-
-public class CreateTicketRequest {
-
-    @NotBlank(message = "title is required")
+public class Ticket {
+    private String id;
     private String title;
-
-    @NotBlank(message = "description is required")
     private String description;
-
-    @NotBlank(message = "category is required")
     private String category;
-
-    @NotBlank(message = "priority is required")
     private String priority;
-
+    private String status;
     private String createdBy;
+    private String createdAt;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -50,11 +50,27 @@ public class CreateTicketRequest {
         this.priority = priority;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public String getCreatedBy() {
         return createdBy;
     }
 
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
     }
 }

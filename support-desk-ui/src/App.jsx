@@ -5,7 +5,9 @@ import sampleTickets from './data/sampleTickets';
 import TicketList from './components/TicketList';
 import TicketDetail from './components/TicketDetail';
 import TicketFilterPanel from './components/TicketFilterPanel';
+import TicketFormPage from './pages/TicketFormPage';
 import AppShell from './components/AppShell';
+import { Link } from 'react-router-dom';
 import LoginPage from './components/LoginPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import { useAuth } from './contexts/AuthContext';
@@ -57,6 +59,11 @@ function App() {
       <section className="tickets-page">
         <h2>Tickets</h2>
         <p>This route shows the ticket list inside the shared app shell.</p>
+        <div style={{ margin: '12px 0' }}>
+          <Link to="/app/tickets/new">
+            <button>Create New Ticket</button>
+          </Link>
+        </div>
         <TicketList
           tickets={filteredTickets}
           selectedId={selectedTicket?.id}
@@ -93,6 +100,7 @@ function App() {
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="tickets" element={<TicketsPage />} />
+          <Route path="tickets/new" element={<TicketFormPage />} />
           <Route path="reports" element={<ReportsPage />} />
         </Route>
       </Route>
