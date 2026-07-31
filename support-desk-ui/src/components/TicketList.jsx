@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import PriorityBadge from './PriorityBadge';
 import StatusBadge from './StatusBadge';
 
@@ -23,6 +24,11 @@ function TicketList({ tickets, selectedId, onSelect }) {
               <div className="ticket-row ticket-meta">
                 <span className="ticket-category">{ticket.category}</span>
                 <StatusBadge status={ticket.status} />
+              </div>
+              <div className="ticket-row ticket-actions" onClick={(e) => e.stopPropagation()}>
+                <Link className="ticket-action-link" to={`/app/tickets/${ticket.id}/edit`}>
+                  Edit
+                </Link>
               </div>
             </li>
           ))}

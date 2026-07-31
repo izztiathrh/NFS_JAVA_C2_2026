@@ -14,8 +14,7 @@ export default function AppHeader() {
 
         <nav className="app-nav">
           <NavLink to="/app/dashboard" end className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>Dashboard</NavLink>
-          <NavLink to="/app/assets" className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>Assets</NavLink>
-          <NavLink to="/app/asset-form" className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>Asset Form</NavLink>
+          <NavLink to="/app/tickets" className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>Tickets</NavLink>
           <NavLink to="/app/reports" className={({isActive}) => isActive ? 'nav-item active' : 'nav-item'}>Reports</NavLink>
           <NavLink to="/api/docs" className="nav-item">API Docs</NavLink>
         </nav>

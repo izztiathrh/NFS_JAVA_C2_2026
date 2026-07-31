@@ -3,6 +3,9 @@ package com.example.AssetTracker.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.AssetTracker.dto.AssetResponse;
+import com.example.AssetTracker.exception.ResourceNotFoundException;
+
 public class AssetService {
     private final List<AssetResponse> assets = new ArrayList<>();
 

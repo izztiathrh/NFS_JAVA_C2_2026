@@ -13,7 +13,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { useAuth } from './contexts/AuthContext';
 
 function App() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [searchText, setSearchText] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -34,22 +34,34 @@ function App() {
   function DashboardPage() {
     return (
       <div className="ticket-dashboard">
-        <div className="ticket-panel">
-          <TicketFilterPanel
-            searchText={searchText}
-            setSearchText={setSearchText}
-            status={statusFilter}
-            setStatus={setStatusFilter}
-            priority={priorityFilter}
-            setPriority={setPriorityFilter}
-          />
-          <TicketList
-            tickets={filteredTickets}
-            selectedId={selectedTicket?.id}
-            onSelect={setSelectedTicket}
-          />
+        <div className="dashboard-hero">
+          <div className="dashboard-hero-text">
+            <h2>Welcome back{user ? `, ${user}` : ''}</h2>
+            <p>Search, filter, and manage support tickets — or open a new one when something needs attention.</p>
+          </div>
+          <Link to="/app/tickets/new" className="btn-primary dashboard-cta">
+            + Create Ticket
+          </Link>
         </div>
-        <TicketDetail ticket={selectedTicket} />
+
+        <div className="dashboard-grid">
+          <div className="ticket-panel">
+            <TicketFilterPanel
+              searchText={searchText}
+              setSearchText={setSearchText}
+              status={statusFilter}
+              setStatus={setStatusFilter}
+              priority={priorityFilter}
+              setPriority={setPriorityFilter}
+            />
+            <TicketList
+              tickets={filteredTickets}
+              selectedId={selectedTicket?.id}
+              onSelect={setSelectedTicket}
+            />
+          </div>
+          <TicketDetail ticket={selectedTicket} />
+        </div>
       </div>
     );
   }
@@ -101,6 +113,7 @@ function App() {
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="tickets" element={<TicketsPage />} />
           <Route path="tickets/new" element={<TicketFormPage />} />
+          <Route path="tickets/:id/edit" element={<TicketFormPage />} />
           <Route path="reports" element={<ReportsPage />} />
         </Route>
       </Route>
