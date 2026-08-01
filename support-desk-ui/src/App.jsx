@@ -35,17 +35,26 @@ function App() {
   function DashboardPage() {
     return (
       <div className="ticket-dashboard">
-        <div className="dashboard-hero">
+        <aside className="app-sidebar-hero">
           <div className="dashboard-hero-text">
             <h2>Welcome back{user ? `, ${user}` : ''}</h2>
-            <p>Search, filter, and manage support tickets — or open a new one when something needs attention.</p>
+            <p style={{ marginTop: 12 }}>Search, filter, and manage support tickets — or open a new one when something needs attention.</p>
           </div>
-          <Link to="/app/tickets/new" className="btn-primary dashboard-cta">
-            + Create Ticket
-          </Link>
-        </div>
+          <div style={{ marginTop: 18 }}>
+            <Link to="/app/tickets/new" className="sidebar-cta">+ Create Ticket</Link>
+          </div>
+        </aside>
 
-        <div className="dashboard-grid">
+        <main>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+            <div className="tickets-header-card" style={{ flex: 1 }}>
+              <h2 style={{ margin: 0 }}>Tickets</h2>
+            </div>
+            <div style={{ marginLeft: 12 }}>
+              <Link to="/app/tickets/new" className="dashboard-cta">New Ticket</Link>
+            </div>
+          </div>
+
           <div className="ticket-panel">
             <TicketFilterPanel
               searchText={ticketCtx.state.filters.searchText}
@@ -58,7 +67,7 @@ function App() {
             <TicketList tickets={filteredTickets} selectedId={selectedTicket?.id} onSelect={(t) => selectTicket(t?.id)} />
           </div>
           <TicketDetail ticket={selectedTicket} />
-        </div>
+        </main>
       </div>
     );
   }

@@ -1,11 +1,14 @@
 import { Link } from 'react-router-dom';
 import PriorityBadge from './PriorityBadge';
 import StatusBadge from './StatusBadge';
+import { useTicketData } from '../context/TicketDataContext.jsx';
 
 function TicketList({ tickets, selectedId, onSelect }) {
+  const { state, loadTickets } = useTicketData();
+  const { page } = state;
   return (
     <div className="ticket-list">
-      <h2>Tickets ({tickets.length})</h2>
+      <h2>Tickets ({page.totalElements ?? tickets.length})</h2>
 
       {tickets.length === 0 ? (
         <p className="empty">No tickets found.</p>
@@ -34,6 +37,21 @@ function TicketList({ tickets, selectedId, onSelect }) {
           ))}
         </ul>
       )}
+      <div className="pagination-controls">
+        <button
+          onClick={() => loadTickets({ page: Math.max(0, (page.page ?? 0) - 1) })}
+          disabled={(page.page ?? 0) <= 0}
+        >
+          Previous
+        </button>
+        <span className="page-info">Page {(page.page ?? 0) + 1} of {(page.totalPages ?? 0) + 1}</span>
+        <button
+          onClick={() => loadTickets({ page: Math.min((page.totalPages ?? 0), (page.page ?? 0) + 1) })}
+          disabled={(page.page ?? 0) >= (page.totalPages ?? 0)}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }

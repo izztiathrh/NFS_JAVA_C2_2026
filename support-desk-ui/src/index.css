@@ -54,24 +54,94 @@ body {
   margin: 0;
 }
 
+body {
+  background: #eef4f7;
+}
+
 #root {
-  width: 1126px;
+  width: 1200px;
   max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
+  margin: 24px auto;
+  text-align: left;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  gap: 18px;
 }
+
+/* Sidebar hero used on wide screens */
+.app-sidebar-hero {
+  background: linear-gradient(180deg, rgba(99,102,241,0.08), rgba(139,92,246,0.03));
+  border-radius: 14px;
+  padding: 26px 22px;
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(11,18,48,0.03);
+}
+
+.sidebar-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: linear-gradient(135deg,#6366f1,#8b5cf6);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 6px 18px rgba(99,102,241,0.18);
+  border: none;
+  cursor: pointer;
+}
+
+/* Dashboard CTA (used in header and card) */
+.dashboard-cta {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: linear-gradient(135deg,#4f46e5,#7c3aed);
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 6px 14px rgba(67,56,202,0.12);
+}
+
+/* Tickets header card */
+.tickets-header-card {
+  background: linear-gradient(180deg,#ffffff, #fbfbff);
+  padding: 14px 18px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(11,18,48,0.04);
+  border: 1px solid rgba(11,18,48,0.03);
+}
+
+/* Global responsive rules */
+@media (max-width: 1024px) {
+  #root {
+    margin: 16px;
+  }
+}
+
+@media (max-width: 900px) {
+  .app-header {
+    padding: 18px 16px;
+    border-radius: 12px;
+  }
+  .brand-title { font-size: 24px; }
+}
+
 
 /* App header styles */
 .app-header {
   background: linear-gradient(90deg,#0f1724 0%, #0b1230 100%);
   color: #fff;
-  padding: 18px 24px;
+  padding: 26px 28px;
   box-shadow: var(--shadow);
+  border-radius: 16px;
+  position: relative;
 }
 .app-header-inner {
   display: flex;
@@ -83,12 +153,13 @@ body {
   text-align: left;
 }
 .brand-title {
-  font-size: 28px;
-  font-weight: 700;
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -1px;
 }
 .brand-sub {
-  font-size: 12px;
-  opacity: 0.85;
+  font-size: 13px;
+  opacity: 0.75;
 }
 .app-nav {
   display: flex;
@@ -96,35 +167,51 @@ body {
 }
 .nav-item {
   padding: 8px 14px;
-  border-radius: 20px;
-  background: rgba(255,255,255,0.06);
-  color: rgba(255,255,255,0.9);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.9);
+  color: #0b1230;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 700;
+  box-shadow: 0 1px 0 rgba(11,18,48,0.05);
 }
 .nav-item.active {
-  background: #fff;
-  color: #0b1230;
+  background: #0b1230;
+  color: #fff;
 }
 .app-user {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
-.user-name {
-  font-weight: 700;
+.user-email {
+  color: rgba(255,255,255,0.85);
+  font-weight: 600;
+  font-size: 14px;
 }
 .btn-logout {
   background: #fff;
   color: #0b1230;
   border: none;
-  padding: 6px 12px;
-  border-radius: 16px;
+  padding: 8px 12px;
+  border-radius: 10px;
   cursor: pointer;
+  font-weight: 700;
+}
+
+.app-header-live {
+  position: absolute;
+  right: 22px;
+  top: 18px;
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  border: 1px solid rgba(255,255,255,0.08);
 }
 
 .app-shell-content {
-  padding: 24px;
+  padding: 12px 24px 32px;
 }
 
 h1,

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTicketData } from '../context/TicketDataContext.jsx';
 
 export default function TicketFilterPanel({
   searchText,
@@ -8,6 +9,9 @@ export default function TicketFilterPanel({
   priority,
   setPriority,
 }) {
+  const { state, loadTickets } = useTicketData();
+
+  const { page } = state;
   return (
     <div className="ticket-filter-panel">
       <input
@@ -31,6 +35,40 @@ export default function TicketFilterPanel({
         <option value="MEDIUM">MEDIUM</option>
         <option value="LOW">LOW</option>
       </select>
+
+      <div className="filter-controls">
+        <label>
+          Page size
+          <select
+            value={page.size}
+            onChange={(e) => loadTickets({ page: 0, size: Number(e.target.value) })}
+          >
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={25}>25</option>
+            <option value={50}>50</option>
+          </select>
+        </label>
+
+        <label>
+          Sort
+          <select
+            value={page.sortBy}
+            onChange={(e) => loadTickets({ page: 0, sortBy: e.target.value })}
+          >
+            <option value="createdAt">createdAt</option>
+            <option value="title">title</option>
+          </select>
+        </label>
+
+        <label>
+          Direction
+          <select value={page.direction} onChange={(e) => loadTickets({ page: 0, direction: e.target.value })}>
+            <option value="desc">desc</option>
+            <option value="asc">asc</option>
+          </select>
+        </label>
+      </div>
     </div>
   );
 }
