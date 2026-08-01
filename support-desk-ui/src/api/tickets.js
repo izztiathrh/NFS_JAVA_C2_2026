@@ -32,43 +32,16 @@ function authHeaders(token, extra = {}) {
   };
 }
 
-export async function getTicket(token, id) {
-  const response = await fetch(`/api/v1/tickets/${encodeURIComponent(id)}`, {
-    method: 'GET',
-    headers: authHeaders(token),
-  });
+import apiRequest from '../../services/httpClient.js';
 
-  if (!response.ok) {
-    throw new Error(await readErrorMessage(response, 'Failed to load ticket'));
-  }
-
-  return response.json();
+export async function getTicket(id) {
+  return apiRequest(`/api/v1/tickets/${encodeURIComponent(id)}`, { method: 'GET' });
 }
 
-export async function createTicket(token, payload) {
-  const response = await fetch('/api/v1/tickets', {
-    method: 'POST',
-    headers: authHeaders(token),
-    body: JSON.stringify(payload),
-  });
-
-  if (!response.ok) {
-    throw new Error(await readErrorMessage(response, 'Failed to create ticket'));
-  }
-
-  return response.json();
+export async function createTicket(payload) {
+  return apiRequest('/api/v1/tickets', { method: 'POST', body: payload });
 }
 
-export async function updateTicket(id, token, payload) {
-  const response = await fetch(`/api/v1/tickets/${encodeURIComponent(id)}`, {
-    method: 'PUT',
-    headers: authHeaders(token),
-    body: JSON.stringify(payload),
-  });
-
-  if (!response.ok) {
-    throw new Error(await readErrorMessage(response, 'Failed to update ticket'));
-  }
-
-  return response.json();
+export async function updateTicket(id, payload) {
+  return apiRequest(`/api/v1/tickets/${encodeURIComponent(id)}`, { method: 'PUT', body: payload });
 }

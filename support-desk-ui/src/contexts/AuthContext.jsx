@@ -30,20 +30,13 @@ export function AuthProvider({ children }) {
   }, [user, token]);
 
   async function login(email, password) {
-    const response = await fetch('/api/auth/login', {
+    // Use centralized apiRequest to get consistent error handling
+    const { apiRequest } = await import('../../services/httpClient.js');
+    const data = await apiRequest('/api/auth/login', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
+      body: { email, password },
     });
 
-    if (!response.ok) {
-      const errorBody = await response.json().catch(() => null);
-      throw new Error(errorBody?.message || 'Login failed');
-    }
-
-    const data = await response.json();
     setUser(data.user);
     setToken(data.token);
     return data;

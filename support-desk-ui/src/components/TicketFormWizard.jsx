@@ -72,8 +72,8 @@ export default function TicketFormWizard({ initialValues, ticketId }) {
 
     try {
       const saved = isEdit
-        ? await updateTicket(ticketId, token, payload)
-        : await createTicket(token, payload);
+        ? await updateTicket(ticketId, payload)
+        : await createTicket(payload);
 
       setSuccessMessage(
         isEdit

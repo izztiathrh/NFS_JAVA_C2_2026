@@ -11,25 +11,26 @@ import { Link } from 'react-router-dom';
 import LoginPage from './components/LoginPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import { useAuth } from './contexts/AuthContext';
+import { useTicketData } from './context/TicketDataContext.jsx';
 
 function App() {
   const { isAuthenticated, user } = useAuth();
-  const [selectedTicket, setSelectedTicket] = useState(null);
-  const [searchText, setSearchText] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
-  const [priorityFilter, setPriorityFilter] = useState('');
+  let ticketCtx;
+  try {
+    ticketCtx = useTicketData();
+  } catch (e) {
+    ticketCtx = {
+      filteredTickets: sampleTickets,
+      selectedTicket: null,
+      setSearchText: () => {},
+      setStatusFilter: () => {},
+      setPriorityFilter: () => {},
+      selectTicket: () => {},
+      state: { filters: { searchText: '', status: '', priority: '' } },
+    };
+  }
 
-  const filteredTickets = sampleTickets.filter((ticket) => {
-    const q = searchText.trim().toLowerCase();
-    if (q) {
-      const inTitle = ticket.title.toLowerCase().includes(q);
-      const inCategory = ticket.category.toLowerCase().includes(q);
-      if (!inTitle && !inCategory) return false;
-    }
-    if (statusFilter && ticket.status !== statusFilter) return false;
-    if (priorityFilter && ticket.priority !== priorityFilter) return false;
-    return true;
-  });
+  const { filteredTickets, selectedTicket, setSearchText, setStatusFilter, setPriorityFilter, selectTicket } = ticketCtx;
 
   function DashboardPage() {
     return (
@@ -47,18 +48,14 @@ function App() {
         <div className="dashboard-grid">
           <div className="ticket-panel">
             <TicketFilterPanel
-              searchText={searchText}
+              searchText={ticketCtx.state.filters.searchText}
               setSearchText={setSearchText}
-              status={statusFilter}
+              status={ticketCtx.state.filters.status}
               setStatus={setStatusFilter}
-              priority={priorityFilter}
+              priority={ticketCtx.state.filters.priority}
               setPriority={setPriorityFilter}
             />
-            <TicketList
-              tickets={filteredTickets}
-              selectedId={selectedTicket?.id}
-              onSelect={setSelectedTicket}
-            />
+            <TicketList tickets={filteredTickets} selectedId={selectedTicket?.id} onSelect={(t) => selectTicket(t?.id)} />
           </div>
           <TicketDetail ticket={selectedTicket} />
         </div>
@@ -76,11 +73,7 @@ function App() {
             <button>Create New Ticket</button>
           </Link>
         </div>
-        <TicketList
-          tickets={filteredTickets}
-          selectedId={selectedTicket?.id}
-          onSelect={setSelectedTicket}
-        />
+        <TicketList tickets={filteredTickets} selectedId={selectedTicket?.id} onSelect={(t) => selectTicket(t?.id)} />
       </section>
     );
   }
