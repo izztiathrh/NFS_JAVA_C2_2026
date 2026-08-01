@@ -32,6 +32,19 @@ function authHeaders(token, extra = {}) {
   };
 }
 
+export async function getTicket(token, id) {
+  const response = await fetch(`/api/v1/tickets/${encodeURIComponent(id)}`, {
+    method: 'GET',
+    headers: authHeaders(token),
+  });
+
+  if (!response.ok) {
+    throw new Error(await readErrorMessage(response, 'Failed to load ticket'));
+  }
+
+  return response.json();
+}
+
 export async function createTicket(token, payload) {
   const response = await fetch('/api/v1/tickets', {
     method: 'POST',

@@ -1,37 +1,54 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import TicketFormWizard from '../components/TicketFormWizard';
-import sampleTickets from '../data/sampleTickets';
+import { useAuth } from '../contexts/AuthContext';
+import { getTicket } from '../api/tickets';
 
 export default function TicketFormPage() {
   const { id } = useParams();
   const isEdit = Boolean(id);
+  const { token } = useAuth();
   const [initialValues, setInitialValues] = useState(null);
   const [loadError, setLoadError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!isEdit) {
       setInitialValues(null);
       setLoadError('');
+      setIsLoading(false);
       return;
     }
 
-    const found = sampleTickets.find((t) => t.id === id);
-    if (!found) {
-      setLoadError(`Ticket ${id} was not found.`);
-      setInitialValues(null);
-      return;
-    }
-
+    let cancelled = false;
     setLoadError('');
-    setInitialValues({
-      title: found.title ?? '',
-      description: found.description ?? '',
-      category: found.category ?? '',
-      priority: found.priority ?? 'LOW',
-      status: found.status ?? 'OPEN',
-    });
-  }, [id, isEdit]);
+    setInitialValues(null);
+    setIsLoading(true);
+
+    getTicket(token, id)
+      .then((ticket) => {
+        if (cancelled) return;
+        setInitialValues({
+          title: ticket.title ?? '',
+          description: ticket.description ?? '',
+          category: ticket.category ?? '',
+          priority: ticket.priority ?? 'LOW',
+          status: ticket.status ?? 'OPEN',
+        });
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        setLoadError(err.message || `Failed to load ticket ${id}.`);
+      })
+      .finally(() => {
+        if (cancelled) return;
+        setIsLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [id, isEdit, token]);
 
   return (
     <section className="ticket-form-page">
@@ -44,9 +61,9 @@ export default function TicketFormPage() {
 
       {loadError ? <p className="form-error" role="alert">{loadError}</p> : null}
 
-      {isEdit && !initialValues && !loadError ? (
+      {isEdit && isLoading ? (
         <p>Loading ticket...</p>
-      ) : (
+      ) : isEdit && !initialValues && !loadError ? null : (
         <TicketFormWizard
           key={id ?? 'new'}
           initialValues={initialValues ?? undefined}
