@@ -22,7 +22,7 @@ public class AssetService {
 
     public AssetResponse getAssetById(String assetId) {
         return assets.stream()
-                .filter(asset -> asset.getAssetId().equals(assetId))
+                .filter(asset -> asset.getAssetTag().equals(assetId))
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("Asset not found with ID: " + assetId));
     }
