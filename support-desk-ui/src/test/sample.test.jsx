@@ -1,13 +1,13 @@
-import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
-function SampleComponent() {
-  return <h1>Sample test works</h1>;
-}
+const sampleTickets = [
+  { id: 'T001', title: 'Cannot access email', category: 'Email', status: 'OPEN', priority: 'HIGH' },
+  { id: 'T002', title: 'Laptop running slowly', category: 'Hardware', status: 'IN_PROGRESS', priority: 'MEDIUM' },
+  { id: 'T003', title: 'Password reset request', category: 'Account', status: 'CLOSED', priority: 'LOW' }
+];
 
-describe('sample test', () => {
-  it('renders a heading', () => {
-    render(<SampleComponent />);
-    expect(screen.getByRole('heading', { name: /sample test works/i })).toBeInTheDocument();
+describe('sample ticket fixture', () => {
+  it('provides three sample tickets', () => {
+    expect(sampleTickets).toHaveLength(3);
   });
 });
