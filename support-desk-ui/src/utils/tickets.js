@@ -1,8 +1,9 @@
 export function filterTickets(tickets, searchText, statusFilter) {
-  const search = (searchText ?? '').trim().toLowerCase();
+  const search = (searchText ?? "").trim().toLowerCase();
 
   return tickets.filter((ticket) => {
-    const matchesStatus = statusFilter === 'ALL' || ticket.status === statusFilter;
+    const matchesStatus =
+      statusFilter === "ALL" || ticket.status === statusFilter;
 
     const searchableText = [
       ticket.title,
@@ -14,10 +15,11 @@ export function filterTickets(tickets, searchText, statusFilter) {
       ticket.createdBy,
     ]
       .filter(Boolean)
-      .join(' ')
+      .join(" ")
       .toLowerCase();
 
-    const matchesSearch = search.length === 0 || searchableText.includes(search);
+    const matchesSearch =
+      search.length === 0 || searchableText.includes(search);
 
     return matchesStatus && matchesSearch;
   });

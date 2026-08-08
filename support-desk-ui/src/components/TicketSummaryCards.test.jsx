@@ -17,7 +17,9 @@ describe("SummaryCards component", () => {
     expect(within(summary).getByText("6")).toBeInTheDocument();
     expect(within(summary).getByText("3")).toBeInTheDocument();
 
-    const inProgressCard = within(summary).getByText("In Progress").closest("article");
+    const inProgressCard = within(summary)
+      .getByText("In Progress")
+      .closest("article");
     const closedCard = within(summary).getByText("Closed").closest("article");
 
     expect(inProgressCard).toHaveTextContent("1");
