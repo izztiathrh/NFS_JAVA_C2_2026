@@ -1,7 +1,7 @@
-import { createContext, useContext, useMemo, useState } from "react";
-import { loginRequest } from "../services/api.js";
+import { createContext, useContext, useMemo, useState } from 'react';
+import { loginRequest } from '../services/api.js';
 
-const STORAGE_KEY = "assetTrackerAuth";
+const STORAGE_KEY = 'assetTrackerAuth';
 const AuthContext = createContext(null);
 
 function readStoredAuth() {
@@ -27,8 +27,8 @@ export function AuthProvider({ children }) {
         id: response.userId,
         name: response.name,
         email: response.email,
-        role: response.role,
-      },
+        role: response.role
+      }
     };
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(nextAuth));
@@ -44,13 +44,13 @@ export function AuthProvider({ children }) {
   const value = useMemo(
     () => ({
       auth,
-      token: auth?.token ?? "",
+      token: auth?.token ?? '',
       user: auth?.user ?? null,
       isAuthenticated: Boolean(auth?.token),
       login,
-      logout,
+      logout
     }),
-    [auth],
+    [auth]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
@@ -60,7 +60,7 @@ export function useAuth() {
   const value = useContext(AuthContext);
 
   if (!value) {
-    throw new Error("useAuth must be used inside AuthProvider");
+    throw new Error('useAuth must be used inside AuthProvider');
   }
 
   return value;

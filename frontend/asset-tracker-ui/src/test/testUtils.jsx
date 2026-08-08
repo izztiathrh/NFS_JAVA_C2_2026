@@ -1,8 +1,8 @@
 import { render } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router';
 
 export const sampleAssets = [
-{
+  {
     id: 'A001',
     assetTag: 'LAP-2026-001',
     name: 'Dell Latitude 5440',
@@ -34,38 +34,34 @@ export const sampleAssets = [
   }
 ];
 
-
 export function renderWithRouter(ui, options = {}) {
-    const { route = '/' } = options;
-    
-    return render(
-    <MemoryRouter initialEntries={[route]}>
-        {ui}
-        </MemoryRouter>,
-        renderOptions
-    );
-}
+  const { route = '/', ...renderOptions } = options;
 
+  return render(
+    <MemoryRouter initialEntries={[route]}>
+      {ui}
+    </MemoryRouter>,
+    renderOptions
+  );
+}
 
 export function storeAdminAuth() {
-    localStorage.setItem('assetTrackerAuth', JSON.stringify({
-        token: 'admin-token',
-        tokenType: 'Bearer',
-        expiresInMinutes: 60,
-        user: {
-            id: 'U0001',
-            username: 'Test Admin User',
-            email: 'test.admin@exampl.com',
-            role: 'ADMIN'
-        }
-    }));
+  localStorage.setItem('assetTrackerAuth', JSON.stringify({
+    token: 'test-admin-token',
+    tokenType: 'Bearer',
+    expiresInMinutes: 60,
+    user: {
+      id: 'U001',
+      name: 'Admin User',
+      email: 'admin@example.com',
+      role: 'ADMIN'
+    }
+  }));
 }
 
-export function createJsonResponse(body, status = 200) {    
-    return new Response(JSON.stringify(body), {
-        status,
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
+export function createJsonResponse(body, status = 200) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'Content-Type': 'application/json' }
+  });
 }
