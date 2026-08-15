@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/error").permitAll()
-                        .requestMatchers("/api/health", "/api/about").permitAll()
+                        .requestMatchers("/api/health", "/api/about", "/api/readiness").permitAll()
                         .requestMatchers("/api/auth/**", "/api/v1/auth/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/tickets", "/api/v1/tickets").hasRole("ADMIN")
                         .requestMatchers("/api/tickets/**", "/api/v1/tickets/**").hasAnyRole("USER", "ADMIN")
