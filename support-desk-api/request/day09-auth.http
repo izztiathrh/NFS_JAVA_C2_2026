@@ -1,0 +1,84 @@
+### 1. Health endpoint is public
+GET http://localhost:8080/api/health
+
+### 2. Ticket endpoint without token returns 401
+GET http://localhost:8080/api/tickets
+
+### 3. Register a new user (returns token)
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Amir Tester",
+  "email": "amir.tester@example.com",
+  "password": "Passw0rd!"
+}
+
+### Register with same email again (expect 409 Conflict)
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Amir Tester",
+  "email": "amir.tester@example.com",
+  "password": "Passw0rd!"
+}
+
+### 4. Login user (returns token)
+# @name userLogin
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "amir.tester@example.com",
+  "password": "Passw0rd!"
+}
+
+### Login with wrong password (expect 401)
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "amir.tester@example.com",
+  "password": "WrongPassword!"
+}
+
+### 5. Ticket endpoint with user token returns 200
+GET http://localhost:8080/api/tickets
+Authorization: Bearer {{userLogin.response.body.token}}
+
+### 6. Create ticket with normal USER token returns 403
+POST http://localhost:8080/api/tickets
+Authorization: Bearer {{userLogin.response.body.token}}
+Content-Type: application/json
+
+{
+  "title": "Cannot access email",
+  "description": "User cannot login to company email account.",
+  "category": "Email",
+  "priority": "HIGH",
+  "createdBy": "amir.tester@example.com"
+}
+
+### 7. Login admin (returns token)
+# @name adminLogin
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "Admin@12345"
+}
+
+### 8. Create ticket with ADMIN token returns 201
+POST http://localhost:8080/api/tickets
+Authorization: Bearer {{adminLogin.response.body.token}}
+Content-Type: application/json
+
+{
+  "title": "Cannot access email",
+  "description": "User cannot login to company email account.",
+  "category": "Email",
+  "priority": "HIGH",
+  "createdBy": "admin@example.com"
+}
