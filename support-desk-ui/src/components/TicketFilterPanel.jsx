@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTicketData } from '../context/TicketDataContext.jsx';
+import { useTicketData } from '../contexts/TicketDataContext.jsx';
 
 export default function TicketFilterPanel({
   searchText,

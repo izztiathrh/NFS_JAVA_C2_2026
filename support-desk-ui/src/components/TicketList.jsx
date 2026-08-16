@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import PriorityBadge from './PriorityBadge';
 import StatusBadge from './StatusBadge';
-import { useTicketData } from '../context/TicketDataContext.jsx';
+import { useTicketData } from '../contexts/TicketDataContext.jsx';
 
 function TicketList({ tickets, selectedId, onSelect }) {
   const { state, loadTickets } = useTicketData();

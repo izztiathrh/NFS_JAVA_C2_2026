@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 import LoginPage from './components/LoginPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import { useAuth } from './contexts/AuthContext';
-import { useTicketData } from './context/TicketDataContext.jsx';
+import { useTicketData } from './contexts/TicketDataContext.jsx';
 
 function App() {
   const { isAuthenticated, user } = useAuth();
