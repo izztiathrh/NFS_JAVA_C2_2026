@@ -1,0 +1,38 @@
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    ports:
+      - "${MONGO_HOST_PORT:-27017}:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  backend:
+    build:
+      context: ./support-desk-api
+    restart: unless-stopped
+    depends_on:
+      - mongo
+    environment:
+      PORT: ${BACKEND_PORT:-8080}
+      MONGO_USERNAME: ${MONGO_USERNAME}
+      MONGO_PASSWORD: ${MONGO_PASSWORD}
+      SPRING_MONGODB_URI: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@mongo:27017/support_desk_db?authSource=admin
+      JWT_SECRET: ${JWT_SECRET}
+    ports:
+      - "${BACKEND_PORT:-8080}:8080"
+
+  frontend:
+    build:
+      context: ./support-desk-ui
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "${FRONTEND_PORT:-8081}:80"
+
+volumes:
+  mongo-data:
